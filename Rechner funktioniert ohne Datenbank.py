@@ -59,9 +59,14 @@ def start_from_beginning():
         print("")
 
         # Nach dem Berechnen fragen, ob eine weitere Berechnung durchgeführt werden soll
-        choice = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
-        if choice.lower() != 'ja':
-            print("Programm beendet.")
-            break
+        while True:
+            choice = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
+            if choice.lower() == 'ja':
+                break
+            elif choice.lower() == 'nein':
+                print("Programm beendet.")
+                sys.exit()
+            else:
+                print("Ungültige Eingabe. Bitte geben Sie 'ja' oder 'nein' ein.")
 
 start_from_beginning()
