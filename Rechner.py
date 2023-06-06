@@ -58,6 +58,4 @@ def start_from_beginning():
         print("Das Ergebnis ist:", Resultat)
         print("")
 
-
-
 start_from_beginning()
