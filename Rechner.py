@@ -28,9 +28,8 @@ while True:
 
 #In dieser Variable wird gespeichert welche eingabe getätigt wurde
     Operation = input("Auswahl: ")
-    if Operation != "1,2,3,4":
-        print("Ungültige Eingabe, Bitte versuche es erneut mit einer Zahl von 1-5")
-        break
+    
+    
 
 #Wenn 5 gewählt wird, wird der Taschenrechner gestoppt
     if Operation == '5':
