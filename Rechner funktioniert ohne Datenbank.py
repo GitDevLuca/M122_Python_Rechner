@@ -11,7 +11,6 @@ def create_table():
     connection.close()
 
 
-
 def fetch_results():
     connection = sqlite3.connect("Rechner.db")
     cursor = connection.cursor()
@@ -22,16 +21,6 @@ def fetch_results():
     connection.close()
 
     return results
-
-
-# Ergebnisse aus der Datenbank abrufen
-saved_results = fetch_results()
-print("Gespeicherte Ergebnisse:")
-for result in saved_results:
-    print(result)
-
-
-
 
 
 def add(a, b):
@@ -134,6 +123,9 @@ def rechner():
             cursor.execute("INSERT INTO rechnungen (Resultat) VALUES (?)", (resultat,))
             connection.commit()
 
+            last_insert_id = cursor.lastrowid
+            print("Eingefügte ID:", last_insert_id)
+
             connection.close()
 
         repeat = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
@@ -145,5 +137,10 @@ def rechner():
 
 
 create_table()
-rechner()
+saved_results = fetch_results()
+print("Gespeicherte Ergebnisse:")
+for result in saved_results:
+    if result[1] is not None:
+        print(result[1])
 
+rechner()
