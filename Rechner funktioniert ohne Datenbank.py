@@ -1,3 +1,14 @@
+import sqlite3
+
+connection = sqlite3.connect("Rechner.db")
+
+print(connection.total_changes)
+
+cursor = connection.cursor()
+
+cursor.execute("CREATE TABLE IF NOT EXISTS rechnungen (id INTEGER auto_increment, Resultat FLOAT)")
+
+
 def add(a, b):
     return a + b
 
@@ -24,12 +35,12 @@ def is_number(input_str):
 def is_valid_number_of_values(input_str):
     return input_str.isdigit()
 
-def calculator():
+def Rechner():
     while True:
         while True:
-            num_count_str = input("Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: ")
-            if is_valid_number_of_values(num_count_str):
-                num_count = int(num_count_str)
+            Zahl_count_str = input("Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: ")
+            if is_valid_number_of_values(Zahl_count_str):
+                num_count = int(Zahl_count_str)
                 if num_count >= 2:
                     break
                 else:
@@ -37,16 +48,16 @@ def calculator():
             else:
                 print("Fehler: Ungültige Eingabe! Bitte geben Sie eine ganze Zahl ein.")
 
-        numbers = []
+        Zahlen = []
         for i in range(num_count):
             while True:
-                num_str = input(f"Geben Sie Zahl {i+1} ein: ")
-                if is_number(num_str):
-                    num = float(num_str)
-                    numbers.append(num)
+                Zahl_str = input(f"Geben Sie Zahl {i+1} ein: ")
+                if is_number(Zahl_str):
+                    num = float(Zahl_str)
+                    Zahlen.append(num)
                     break
                 else:
-                    print("Fehler: Ungültige Eingabe! Bitte geben Sie eine Zahl ein.")
+                    print("✘ Fehler: Ungültige Eingabe! Bitte geben Sie eine Zahl ein.")
 
         valid_operations = ["+", "-", "*", "/"]
 
@@ -55,36 +66,42 @@ def calculator():
             if operation in valid_operations:
                 break
             else:
-                print("Fehler: Ungültige Operation! Bitte wählen Sie eine der folgenden Optionen: '+', '-', '*', '/'")
+                print("✘ Fehler: Ungültige Operation! Bitte wählen Sie eine der folgenden Optionen: '+', '-', '*', '/'")
 
         result = None
 
         if operation == "+":
-            result = numbers[0]
+            result = Zahlen[0]
             for i in range(1, num_count):
-                result = add(result, numbers[i])
+                result = add(result, Zahlen[i])
         elif operation == "-":
-            result = numbers[0]
+            result = Zahlen[0]
             for i in range(1, num_count):
-                result = subtract(result, numbers[i])
+                result = subtract(result, Zahlen[i])
         elif operation == "*":
-            result = numbers[0]
+            result = Zahlen[0]
             for i in range(1, num_count):
-                result = multiply(result, numbers[i])
+                result = multiply(result, Zahlen[i])
         elif operation == "/":
-            result = numbers[0]
+            result = Zahlen[0]
             for i in range(1, num_count):
-                if numbers[i] == 0:
-                    print("Fehler: Division durch Null ist nicht erlaubt!")
+                if Zahlen[i] == 0:
+                    print("✘ Fehler: Division durch Null ist nicht erlaubt!")
                     result = None
                     break
                 else:
-                    result = divide(result, numbers[i])
+                    result = divide(result, Zahlen[i])
         else:
-            print("Fehler: Ungültige Operation!")
+            print("✘ Fehler: Ungültige Operation!")
 
         if result is not None:
             print("Ergebnis: ", result)
+        
+            cursor.execute("INSERT INTO rechnungen VALUES (result)")
+
+            connection.commit()
+
+            print(connection.total_changes)
 
         repeat = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
         while repeat.lower() != "ja" and repeat.lower() != "nein":
@@ -93,4 +110,4 @@ def calculator():
         if repeat.lower() == "nein":
             break
 
-calculator()
+Rechner()
