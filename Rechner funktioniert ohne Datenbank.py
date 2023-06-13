@@ -68,35 +68,35 @@ def Rechner():
             else:
                 print("✘ Fehler: Ungültige Operation! Bitte wählen Sie eine der folgenden Optionen: '+', '-', '*', '/'")
 
-        result = None
+        resultat = None
 
         if operation == "+":
-            result = Zahlen[0]
+            resultat = Zahlen[0]
             for i in range(1, num_count):
-                result = add(result, Zahlen[i])
+                resultat = add(resultat, Zahlen[i])
         elif operation == "-":
-            result = Zahlen[0]
+            resultat = Zahlen[0]
             for i in range(1, num_count):
-                result = subtract(result, Zahlen[i])
+                resultat = subtract(resultat, Zahlen[i])
         elif operation == "*":
-            result = Zahlen[0]
+            resultat = Zahlen[0]
             for i in range(1, num_count):
-                result = multiply(result, Zahlen[i])
+                resultat = multiply(resultat, Zahlen[i])
         elif operation == "/":
-            result = Zahlen[0]
+            resultat = Zahlen[0]
             for i in range(1, num_count):
                 if Zahlen[i] == 0:
                     print("✘ Fehler: Division durch Null ist nicht erlaubt!")
-                    result = None
+                    resultat = None
                     break
                 else:
-                    result = divide(result, Zahlen[i])
+                    resultat = divide(resultat, Zahlen[i])
         else:
             print("✘ Fehler: Ungültige Operation!")
 
-        if result is not None:
-            print("Ergebnis: ", result)
-        
+        if resultat is not None:
+            print("Ergebnis: ", resultat)
+
             cursor.execute("INSERT INTO rechnungen VALUES (result)")
 
             connection.commit()
