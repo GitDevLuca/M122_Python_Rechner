@@ -1,22 +1,50 @@
 import sqlite3
 
-connection = sqlite3.connect("Rechner.db")
 
-print(connection.total_changes)
+def create_table():
+    connection = sqlite3.connect("Rechner.db")
+    cursor = connection.cursor()
 
-cursor = connection.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS rechnungen (id INTEGER PRIMARY KEY AUTOINCREMENT, Resultat FLOAT)")
+    connection.commit()
 
-cursor.execute("CREATE TABLE IF NOT EXISTS rechnungen (id INTEGER auto_increment, Resultat FLOAT)")
+    connection.close()
+
+
+
+def fetch_results():
+    connection = sqlite3.connect("Rechner.db")
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM rechnungen")
+    results = cursor.fetchall()
+
+    connection.close()
+
+    return results
+
+
+# Ergebnisse aus der Datenbank abrufen
+saved_results = fetch_results()
+print("Gespeicherte Ergebnisse:")
+for result in saved_results:
+    print(result)
+
+
+
 
 
 def add(a, b):
     return a + b
 
+
 def subtract(a, b):
     return a - b
 
+
 def multiply(a, b):
     return a * b
+
 
 def divide(a, b):
     if b != 0:
@@ -25,6 +53,7 @@ def divide(a, b):
         print("Fehler: Division durch Null ist nicht erlaubt!")
         return None
 
+
 def is_number(input_str):
     try:
         float(input_str)
@@ -32,15 +61,17 @@ def is_number(input_str):
     except ValueError:
         return False
 
+
 def is_valid_number_of_values(input_str):
     return input_str.isdigit()
 
-def Rechner():
+
+def rechner():
     while True:
         while True:
-            Zahl_count_str = input("Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: ")
-            if is_valid_number_of_values(Zahl_count_str):
-                num_count = int(Zahl_count_str)
+            zahl_count_str = input("Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: ")
+            if is_valid_number_of_values(zahl_count_str):
+                num_count = int(zahl_count_str)
                 if num_count >= 2:
                     break
                 else:
@@ -48,13 +79,13 @@ def Rechner():
             else:
                 print("Fehler: Ungültige Eingabe! Bitte geben Sie eine ganze Zahl ein.")
 
-        Zahlen = []
+        zahlen = []
         for i in range(num_count):
             while True:
-                Zahl_str = input(f"Geben Sie Zahl {i+1} ein: ")
-                if is_number(Zahl_str):
-                    num = float(Zahl_str)
-                    Zahlen.append(num)
+                zahl_str = input(f"Geben Sie Zahl {i+1} ein: ")
+                if is_number(zahl_str):
+                    num = float(zahl_str)
+                    zahlen.append(num)
                     break
                 else:
                     print("✘ Fehler: Ungültige Eingabe! Bitte geben Sie eine Zahl ein.")
@@ -71,37 +102,39 @@ def Rechner():
         resultat = None
 
         if operation == "+":
-            resultat = Zahlen[0]
+            resultat = zahlen[0]
             for i in range(1, num_count):
-                resultat = add(resultat, Zahlen[i])
+                resultat = add(resultat, zahlen[i])
         elif operation == "-":
-            resultat = Zahlen[0]
+            resultat = zahlen[0]
             for i in range(1, num_count):
-                resultat = subtract(resultat, Zahlen[i])
+                resultat = subtract(resultat, zahlen[i])
         elif operation == "*":
-            resultat = Zahlen[0]
+            resultat = zahlen[0]
             for i in range(1, num_count):
-                resultat = multiply(resultat, Zahlen[i])
+                resultat = multiply(resultat, zahlen[i])
         elif operation == "/":
-            resultat = Zahlen[0]
+            resultat = zahlen[0]
             for i in range(1, num_count):
-                if Zahlen[i] == 0:
+                if zahlen[i] == 0:
                     print("✘ Fehler: Division durch Null ist nicht erlaubt!")
                     resultat = None
                     break
                 else:
-                    resultat = divide(resultat, Zahlen[i])
+                    resultat = divide(resultat, zahlen[i])
         else:
             print("✘ Fehler: Ungültige Operation!")
 
         if resultat is not None:
-            print("Ergebnis: ", resultat)
+            print("Ergebnis:", resultat)
 
-            cursor.execute("INSERT INTO rechnungen VALUES (result)")
+            connection = sqlite3.connect("Rechner.db")
+            cursor = connection.cursor()
 
+            cursor.execute("INSERT INTO rechnungen (Resultat) VALUES (?)", (resultat,))
             connection.commit()
 
-            print(connection.total_changes)
+            connection.close()
 
         repeat = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
         while repeat.lower() != "ja" and repeat.lower() != "nein":
@@ -110,4 +143,7 @@ def Rechner():
         if repeat.lower() == "nein":
             break
 
-Rechner()
+
+create_table()
+rechner()
+
