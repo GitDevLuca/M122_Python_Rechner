@@ -1,72 +1,96 @@
-import sys
+def add(a, b):
+    return a + b
 
-def start_from_beginning():
-    # Dies ist ein kleiner Taschenrechner 🌐
+def subtract(a, b):
+    return a - b
 
-    # Funktionen definieren: Plus, Minus, Mal, Durch
-    def Addition(x, y):
-        return x + y
+def multiply(a, b):
+    return a * b
 
-    def Subtraktion(x, y):
-        return x - y
+def divide(a, b):
+    if b != 0:
+        return a / b
+    else:
+        print("Fehler: Division durch Null ist nicht erlaubt!")
+        return None
 
-    def Multiplikation(x, y):
-        return x * y
+def is_number(input_str):
+    try:
+        float(input_str)
+        return True
+    except ValueError:
+        return False
 
-    def Division(x, y):
-        return x / y
+def is_valid_number_of_values(input_str):
+    return input_str.isdigit()
 
-    print("Taschenrechner")
-
+def calculator():
     while True:
-        print("Bitte wählen Sie eine Operation aus:")
-        print("1. Addieren")
-        print("2. Subtrahieren")
-        print("3. Multiplizieren")
-        print("4. Dividieren")
-        print("5. Beenden")
+        while True:
+            num_count_str = input("Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: ")
+            if is_valid_number_of_values(num_count_str):
+                num_count = int(num_count_str)
+                if num_count >= 2:
+                    break
+                else:
+                    print("Fehler: Sie müssen mindestens 2 Zahlen angeben!")
+            else:
+                print("Fehler: Ungültige Eingabe! Bitte geben Sie eine ganze Zahl ein.")
 
-        Operation = input("Auswahl: ")
+        numbers = []
+        for i in range(num_count):
+            while True:
+                num_str = input(f"Geben Sie Zahl {i+1} ein: ")
+                if is_number(num_str):
+                    num = float(num_str)
+                    numbers.append(num)
+                    break
+                else:
+                    print("Fehler: Ungültige Eingabe! Bitte geben Sie eine Zahl ein.")
 
-        if Operation not in ["1", "2", "3", "4", "5"]:
-            print("Ungültige Eingabe. Bitte wählen Sie eine Zahl von 1-5.")
-            continue
+        valid_operations = ["+", "-", "*", "/"]
 
-        if Operation == '5':
-            print("Programm beendet.")
+        while True:
+            operation = input("Welche Operation möchten Sie durchführen (+, -, *, /)?: ")
+            if operation in valid_operations:
+                break
+            else:
+                print("Fehler: Ungültige Operation! Bitte wählen Sie eine der folgenden Optionen: '+', '-', '*', '/'")
+
+        result = None
+
+        if operation == "+":
+            result = numbers[0]
+            for i in range(1, num_count):
+                result = add(result, numbers[i])
+        elif operation == "-":
+            result = numbers[0]
+            for i in range(1, num_count):
+                result = subtract(result, numbers[i])
+        elif operation == "*":
+            result = numbers[0]
+            for i in range(1, num_count):
+                result = multiply(result, numbers[i])
+        elif operation == "/":
+            result = numbers[0]
+            for i in range(1, num_count):
+                if numbers[i] == 0:
+                    print("Fehler: Division durch Null ist nicht erlaubt!")
+                    result = None
+                    break
+                else:
+                    result = divide(result, numbers[i])
+        else:
+            print("Fehler: Ungültige Operation!")
+
+        if result is not None:
+            print("Ergebnis: ", result)
+
+        repeat = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
+        while repeat.lower() != "ja" and repeat.lower() != "nein":
+            repeat = input("Bitte geben Sie 'ja' oder 'nein' ein: ")
+
+        if repeat.lower() == "nein":
             break
 
-        try:
-            Eingabe1 = float(input("Geben Sie die erste Zahl ein: "))
-            Eingabe2 = float(input("Geben Sie die zweite Zahl ein: "))
-        except ValueError:
-            print("Ungültige Eingabe. Bitte geben Sie eine Zahl ein.")
-            continue
-
-        if Operation == "1":
-            Resultat = Addition(Eingabe1, Eingabe2)
-        elif Operation == "2":
-            Resultat = Subtraktion(Eingabe1, Eingabe2)
-        elif Operation == "3":
-            Resultat = Multiplikation(Eingabe1, Eingabe2)
-        elif Operation == "4":
-            if Eingabe2 == 0:
-                print("Fehler: Division durch Null ist nicht erlaubt.")
-                continue
-            Resultat = Division(Eingabe1, Eingabe2)
-
-        print("Das Ergebnis ist:", Resultat)
-        print("")
-
-        # Nach dem Berechnen fragen, ob eine weitere Berechnung durchgeführt werden soll
-        while True:
-            choice = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
-            if choice.lower() == 'ja':
-                break
-            elif choice.lower() == 'nein':
-                print("Programm beendet.")
-                sys.exit()
-            else:
-                print("Ungültige Eingabe. Bitte geben Sie 'ja' oder 'nein' ein.")
-
-start_from_beginning()
+calculator()
