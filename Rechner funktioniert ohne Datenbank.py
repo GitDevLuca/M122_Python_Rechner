@@ -1,6 +1,13 @@
 import sqlite3
 
 
+class colors:
+    Green = '\033[92m' #Grün
+    WARNING = '\033[93m' #Gelb
+    FAIL = '\033[91m' #Rot
+    RESET = '\033[0m' #Farbe zurücksetzen
+
+
 def create_table():
     connection = sqlite3.connect("Rechner.db")
     cursor = connection.cursor()
@@ -39,7 +46,7 @@ def divide(a, b):
     if b != 0:
         return a / b
     else:
-        print("Fehler: Division durch Null ist nicht erlaubt!")
+        print(f"{colors.FAIL}Fehler: Division durch Null ist nicht erlaubt!{colors.RESET}")
         return None
 
 
@@ -58,26 +65,26 @@ def is_valid_number_of_values(input_str):
 def rechner():
     while True:
         while True:
-            zahl_count_str = input("Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: ")
+            zahl_count_str = input(f"{colors.WARNING}Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: {colors.RESET}")
             if is_valid_number_of_values(zahl_count_str):
                 num_count = int(zahl_count_str)
                 if num_count >= 2:
                     break
                 else:
-                    print("Fehler: Sie müssen mindestens 2 Zahlen angeben!")
+                    print(f"{colors.FAIL}Fehler: Sie müssen mindestens 2 Zahlen angeben!{colors.RESET}")
             else:
-                print("Fehler: Ungültige Eingabe! Bitte geben Sie eine ganze Zahl ein.")
+                print(f"{colors.FAIL}Fehler: Ungültige Eingabe! Bitte geben Sie eine ganze Zahl ein.{colors.RESET}")
 
         zahlen = []
         for i in range(num_count):
             while True:
-                zahl_str = input(f"Geben Sie Zahl {i+1} ein: ")
+                zahl_str = input(f"{colors.Green}Geben Sie Zahl {i+1} ein: {colors.RESET}")
                 if is_number(zahl_str):
                     num = float(zahl_str)
                     zahlen.append(num)
                     break
                 else:
-                    print("✘ Fehler: Ungültige Eingabe! Bitte geben Sie eine Zahl ein.")
+                    print(f"✘{colors.FAIL} Fehler: Ungültige Eingabe! Bitte geben Sie eine Zahl ein.{colors.RESET}")
 
         valid_operations = ["+", "-", "*", "/"]
 
@@ -86,7 +93,7 @@ def rechner():
             if operation in valid_operations:
                 break
             else:
-                print("✘ Fehler: Ungültige Operation! Bitte wählen Sie eine der folgenden Optionen: '+', '-', '*', '/'")
+                print(f"✘{colors.FAIL}Fehler: Ungültige Operation! Bitte wählen Sie eine der folgenden Optionen: '+', '-', '*', '/'{colors.RESET}")
 
         resultat = None
 
@@ -106,13 +113,13 @@ def rechner():
             resultat = zahlen[0]
             for i in range(1, num_count):
                 if zahlen[i] == 0:
-                    print("✘ Fehler: Division durch Null ist nicht erlaubt!")
+                    print(f"{colors.FAIL} ✘ Fehler: Division durch Null ist nicht erlaubt!{colors.RESET}")
                     resultat = None
                     break
                 else:
                     resultat = divide(resultat, zahlen[i])
         else:
-            print("✘ Fehler: Ungültige Operation!")
+            print(f"✘{colors.FAIL} Fehler: Ungültige Operation!{colors.RESET}")
 
         if resultat is not None:
             print("Ergebnis:", resultat)
@@ -128,7 +135,7 @@ def rechner():
 
             connection.close()
 
-        repeat = input("Möchten Sie eine weitere Berechnung durchführen? (ja/nein): ")
+        repeat = input(f"{colors.WARNING}Möchten Sie eine weitere Berechnung durchführen? (ja/nein): {colors.RESET}")
         while repeat.lower() != "ja" and repeat.lower() != "nein":
             repeat = input("Bitte geben Sie 'ja' oder 'nein' ein: ")
 
