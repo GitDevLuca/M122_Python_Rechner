@@ -6,7 +6,7 @@ class colors:
     WARNING = '\033[93m' #Gelb
     FAIL = '\033[91m' #Rot
     RESET = '\033[0m' #Farbe zurücksetzen
-
+    BOLD = '\033[1m'  # Fett gedruckt
 
 def create_table():
     connection = sqlite3.connect("Rechner.db")
@@ -65,7 +65,7 @@ def is_valid_number_of_values(input_str):
 def rechner():
     while True:
         while True:
-            zahl_count_str = input(f"{colors.WARNING}Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: {colors.RESET}")
+            zahl_count_str = input(f"{colors.BOLD}Geben Sie die Anzahl der Zahlen ein, mit denen Sie rechnen möchten: {colors.RESET}")
             if is_valid_number_of_values(zahl_count_str):
                 num_count = int(zahl_count_str)
                 if num_count >= 2:
